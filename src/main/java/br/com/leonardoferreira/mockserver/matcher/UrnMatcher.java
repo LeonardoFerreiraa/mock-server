@@ -1,8 +1,5 @@
 package br.com.leonardoferreira.mockserver.matcher;
 
-import lombok.Getter;
-
-@Getter
 public class UrnMatcher {
 
     private final String regex;

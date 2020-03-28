@@ -12,13 +12,11 @@ public class Response {
     private final Object body;
 
     public static Response notFound() {
-        return new NotFound();
+        return new Response(404, null);
     }
 
-    public static class NotFound extends Response {
-        public NotFound() {
-            super(404, null);
-        }
+    public static Response internalServerError(final String message) {
+        return new Response(500, message);
     }
 
 }

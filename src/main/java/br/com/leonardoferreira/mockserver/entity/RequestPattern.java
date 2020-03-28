@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.com.leonardoferreira.mockserver.matcher.QueryParamMatcher;
 import br.com.leonardoferreira.mockserver.matcher.UrnMatcher;
+import br.com.leonardoferreira.mockserver.util.CollectionUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class RequestPattern {
 
     private final HttpMethod method;
 
-    private final String url;
+    private final Url url;
 
     private final List<QueryParam> queryParams;
 
@@ -24,11 +25,11 @@ public class RequestPattern {
     }
 
     public UrnMatcher getUrlMatcher() {
-        return UrnMatcher.from(getUrl());
+        return UrnMatcher.from(url.getUrn());
     }
 
     public QueryParamMatcher getQueryParamMatch() {
-        return QueryParamMatcher.from(queryParams);
+        return QueryParamMatcher.from(CollectionUtils.concat(queryParams, url.getQueryParams()));
     }
 
     @NoArgsConstructor
@@ -36,7 +37,7 @@ public class RequestPattern {
 
         private HttpMethod method;
 
-        private String url;
+        private Url url;
 
         private List<QueryParam> queryParams;
 
@@ -46,7 +47,7 @@ public class RequestPattern {
         }
 
         public Builder url(final String url) {
-            this.url = url;
+            this.url = Url.from(url);
             return this;
         }
 

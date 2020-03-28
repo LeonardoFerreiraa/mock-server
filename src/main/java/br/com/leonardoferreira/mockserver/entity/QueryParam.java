@@ -2,10 +2,11 @@ package br.com.leonardoferreira.mockserver.entity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import br.com.leonardoferreira.mockserver.util.Pair;
+import br.com.leonardoferreira.mockserver.util.StringUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +23,10 @@ public class QueryParam {
                 .map(it -> it.split("&"))
                 .stream()
                 .flatMap(Arrays::stream)
-                .map(qp -> {
-                    final String[] split = qp.split("=", 2);
-                    if (split.length == 2) {
-                        return QueryParam.of(split[0], split[1]);
-                    }
-
-                    return null;
+                .map(queryParam -> {
+                    final Pair<String, String> pair = StringUtils.toPair(queryParam, "=");
+                    return QueryParam.of(pair.getFirst(), pair.getSecond());
                 })
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

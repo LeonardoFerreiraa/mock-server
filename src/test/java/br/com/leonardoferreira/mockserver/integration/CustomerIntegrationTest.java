@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.integration;
+package br.com.leonardoferreira.mockserver.integration;
 
 import br.com.leonardoferreira.mockserver.MockServer;
 import io.restassured.RestAssured;
@@ -39,6 +39,7 @@ class CustomerIntegrationTest {
                 .given()
                     .log().all()
                     .queryParam("name", "mario")
+                    .queryParam("lastName", "armario")
                 .when()
                     .get("/customer")
                 .then()

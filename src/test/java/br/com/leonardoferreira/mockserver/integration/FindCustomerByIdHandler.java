@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.integration;
+package br.com.leonardoferreira.mockserver.integration;
 
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;

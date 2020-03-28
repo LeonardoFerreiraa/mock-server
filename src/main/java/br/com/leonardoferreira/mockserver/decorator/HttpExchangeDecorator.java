@@ -1,17 +1,24 @@
 package br.com.leonardoferreira.mockserver.decorator;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;
+import br.com.leonardoferreira.mockserver.entity.Response;
 import br.com.leonardoferreira.mockserver.entity.Url;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @RequiredArgsConstructor(staticName = "from")
-public class HttpExchangeDecorator {
+public class HttpExchangeDecorator implements AutoCloseable {
 
     private final HttpExchange exchange;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public Request toRequest() {
         return Request.builder()
@@ -20,14 +27,26 @@ public class HttpExchangeDecorator {
                 .build();
     }
 
-    public void addHeader(final String key, final String value) {
-        exchange.getResponseHeaders().add(key, value);
+    @SneakyThrows
+    public void respond(final Response response) {
+        addHeader("Content-Type", "application/json");
+        setBody(response.getStatus(), objectMapper.writeValueAsBytes(response.getBody()));
     }
 
-    public void setBody(final int status, final byte[] responseBytes) throws IOException {
+    private void addHeader(final String key, final String value) {
+        final Headers headers = exchange.getResponseHeaders();
+        headers.add(key, value);
+    }
+
+    private void setBody(final int status, final byte[] responseBytes) throws IOException {
         exchange.sendResponseHeaders(status, responseBytes.length);
-        exchange.getResponseBody()
-                .write(responseBytes);
+        try (final OutputStream responseBody = exchange.getResponseBody()) {
+            responseBody.write(responseBytes);
+        }
     }
 
+    @Override
+    public void close() throws Exception {
+        exchange.close();
+    }
 }

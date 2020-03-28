@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.integration;
+package br.com.leonardoferreira.mockserver.integration;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
