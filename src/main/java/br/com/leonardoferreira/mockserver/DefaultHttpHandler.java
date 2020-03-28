@@ -5,8 +5,8 @@ import java.util.List;
 
 import br.com.leonardoferreira.mockserver.decorator.HttpExchangeDecorator;
 import br.com.leonardoferreira.mockserver.entity.Request;
-import br.com.leonardoferreira.mockserver.entity.RequestPattern;
 import br.com.leonardoferreira.mockserver.entity.Response;
+import br.com.leonardoferreira.mockserver.matcher.RequestMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -40,25 +40,13 @@ public class DefaultHttpHandler implements HttpHandler {
         final Request request = exchange.toRequest();
 
         final Response response = handlers.stream()
-                .filter(handler -> match(handler.pattern(), request))
+                .filter(handler -> RequestMatcher.from(handler.pattern()).match(request))
                 .map(handler -> handler.handle(request))
                 .findFirst()
                 .orElse(Response.notFound());
 
         exchange.addHeader("Content-Type", "application/json");
         exchange.setBody(response.getStatus(), objectMapper.writeValueAsBytes(response.getBody()));
-    }
-
-    private boolean match(final RequestPattern requestPattern, final Request request) {
-        if (requestPattern.getMethod() == request.getMethod()) {
-            if (requestPattern.getUrlMatcher().match(request.getUrl().getUrn())) {
-                if (requestPattern.getQueryParamMatch().match(request.getUrl().getQueryParams())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
 
