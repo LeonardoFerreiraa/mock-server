@@ -1,8 +1,8 @@
 package br.com.leonardoferreira.mockserver.entity;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.mockserver.util.Pair;
@@ -19,10 +19,11 @@ public class QueryParam {
     private final String value;
 
     public static List<QueryParam> from(final String query) {
-        return Optional.ofNullable(query)
-                .map(it -> it.split("&"))
-                .stream()
-                .flatMap(Arrays::stream)
+        if (query == null) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.stream(query.split("&"))
                 .map(queryParam -> {
                     final Pair<String, String> pair = StringUtils.toPair(queryParam, "=");
                     return QueryParam.of(pair.getFirst(), pair.getSecond());

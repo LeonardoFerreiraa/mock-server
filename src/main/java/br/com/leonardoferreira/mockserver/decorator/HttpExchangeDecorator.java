@@ -2,7 +2,6 @@ package br.com.leonardoferreira.mockserver.decorator;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Optional;
 
 import br.com.leonardoferreira.mockserver.entity.Header;
@@ -17,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @RequiredArgsConstructor(staticName = "from")
-public class HttpExchangeDecorator implements AutoCloseable {
+public class HttpExchangeDecorator {
 
     private final HttpExchange exchange;
 
@@ -33,10 +32,10 @@ public class HttpExchangeDecorator implements AutoCloseable {
     public void respond(final Response response) {
         addHeader(Header.of("Content-Type", "application/json"));
 
-        Optional.ofNullable(response.getHeaders())
-                .stream()
-                .flatMap(List::stream)
-                .forEach(this::addHeader);
+        if (response.getHeaders() != null) {
+            response.getHeaders()
+                    .forEach(this::addHeader);
+        }
 
         setBody(response);
     }
@@ -63,8 +62,7 @@ public class HttpExchangeDecorator implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() throws Exception {
+    public void close() {
         exchange.close();
     }
 

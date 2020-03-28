@@ -20,11 +20,13 @@ public class DefaultHttpHandler implements HttpHandler {
     public void handle(final HttpExchange httpExchange) throws IOException {
         final HttpExchangeDecorator exchange = HttpExchangeDecorator.from(httpExchange);
 
-        try (exchange) {
+        try {
             exchange.respond(handle(exchange));
         } catch (final Exception e) {
             e.printStackTrace();
             exchange.respond(Response.internalServerError(e.getMessage()));
+        } finally {
+            exchange.close();
         }
     }
 
