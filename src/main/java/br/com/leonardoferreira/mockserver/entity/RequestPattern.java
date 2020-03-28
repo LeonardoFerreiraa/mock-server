@@ -3,6 +3,7 @@ package br.com.leonardoferreira.mockserver.entity;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.leonardoferreira.mockserver.matcher.HeaderMatcher;
 import br.com.leonardoferreira.mockserver.matcher.QueryParamMatcher;
 import br.com.leonardoferreira.mockserver.matcher.UrnMatcher;
 import br.com.leonardoferreira.mockserver.util.CollectionUtils;
@@ -19,6 +20,8 @@ public class RequestPattern {
 
     private final List<QueryParam> queryParams;
 
+    private final List<Header> headers;
+
     public static Builder builder() {
         return new Builder();
     }
@@ -27,8 +30,12 @@ public class RequestPattern {
         return UrnMatcher.from(url.getUrn());
     }
 
-    public QueryParamMatcher getQueryParamMatch() {
+    public QueryParamMatcher getQueryParamMatcher() {
         return QueryParamMatcher.from(CollectionUtils.concat(queryParams, url.getQueryParams()));
+    }
+
+    public HeaderMatcher toHeaderMatcher() {
+        return HeaderMatcher.from(headers);
     }
 
     public static class Builder {
@@ -38,6 +45,8 @@ public class RequestPattern {
         private Url url;
 
         private List<QueryParam> queryParams;
+
+        private List<Header> headers;
 
         public Builder method(final HttpMethod method) {
             this.method = method;
@@ -54,8 +63,13 @@ public class RequestPattern {
             return this;
         }
 
+        public Builder headers(final Header... headers) {
+            this.headers = Arrays.asList(headers);
+            return this;
+        }
+
         public RequestPattern build() {
-            return new RequestPattern(method, url, queryParams);
+            return new RequestPattern(method, url, queryParams, headers);
         }
 
     }

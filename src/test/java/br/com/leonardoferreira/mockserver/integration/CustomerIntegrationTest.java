@@ -17,6 +17,7 @@ class CustomerIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
+                    .header("x-details", "true")
                 .when()
                     .get("/customer/123")
                 .then()

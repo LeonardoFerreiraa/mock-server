@@ -2,6 +2,7 @@ package br.com.leonardoferreira.mockserver.matcher;
 
 import java.util.List;
 
+import br.com.leonardoferreira.mockserver.entity.Header;
 import br.com.leonardoferreira.mockserver.entity.QueryParam;
 import br.com.leonardoferreira.mockserver.entity.Request;
 import br.com.leonardoferreira.mockserver.entity.RequestPattern;
@@ -22,7 +23,9 @@ public class RequestMatcher {
         return new MethodRequestMatcherChain(
                 new UrnRequestMatcher(
                         new QueryParamRequestMatcher(
-                                request -> true
+                                new HeaderRequestMatcher(
+                                        request -> true
+                                )
                         )
                 )
         );
@@ -78,10 +81,30 @@ public class RequestMatcher {
         }
 
         private boolean queryParamMatches(final Request request) {
-            final QueryParamMatcher queryParamMatch = requestPattern.getQueryParamMatch();
+            final QueryParamMatcher queryParamMatch = requestPattern.getQueryParamMatcher();
             final List<QueryParam> requestedQueryParams = request.getUrl().getQueryParams();
 
             return queryParamMatch.match(requestedQueryParams);
+        }
+
+    }
+
+    @RequiredArgsConstructor
+    class HeaderRequestMatcher implements RequestMatcherChain {
+
+        private final RequestMatcherChain next;
+
+
+        @Override
+        public boolean check(final Request request) {
+            return headerMatches(request) && next.check(request);
+        }
+
+        private boolean headerMatches(final Request request) {
+            final HeaderMatcher headerMatcher = requestPattern.toHeaderMatcher();
+            final List<Header> requestedHeaders = request.getHeaders();
+
+            return headerMatcher.match(requestedHeaders);
         }
 
     }

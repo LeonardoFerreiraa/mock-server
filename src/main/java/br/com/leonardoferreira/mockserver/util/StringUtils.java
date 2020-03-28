@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.mockserver.util;
 
+import java.util.Objects;
+
 public class StringUtils {
 
     public static Pair<String, String> toPair(final String str, final String splitBy) {
@@ -14,6 +16,10 @@ public class StringUtils {
         }
 
         return Pair.of(split[0], split[1]);
+    }
+
+    public static boolean equalsIgnoreCase(final String a, final String b) {
+        return Objects.equals(a, b) || (a != null && a.equalsIgnoreCase(b));
     }
 
 }

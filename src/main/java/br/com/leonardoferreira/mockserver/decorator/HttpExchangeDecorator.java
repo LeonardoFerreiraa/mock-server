@@ -27,6 +27,7 @@ public class HttpExchangeDecorator implements AutoCloseable {
         return Request.builder()
                 .method(HttpMethod.valueOf(exchange.getRequestMethod()))
                 .url(Url.from(exchange.getRequestURI().toString()))
+                .headers(Header.from(exchange.getRequestHeaders()))
                 .build();
     }
 

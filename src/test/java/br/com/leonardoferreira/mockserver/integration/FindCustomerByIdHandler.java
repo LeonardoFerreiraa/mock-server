@@ -14,6 +14,9 @@ public class FindCustomerByIdHandler implements RequestHandler {
         return RequestPattern.builder()
                 .method(HttpMethod.GET)
                 .url("/customer/{id}")
+                .headers(
+                        Header.of("x-details", "true")
+                )
                 .build();
     }
 
