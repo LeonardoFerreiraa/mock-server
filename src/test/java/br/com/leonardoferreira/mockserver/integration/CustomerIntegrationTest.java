@@ -21,6 +21,7 @@ class CustomerIntegrationTest {
                     .get("/customer/123")
                 .then()
                     .log().all()
+                    .header("x-custom-header", Matchers.is("customvalue"))
                     .statusCode(200)
                     .body("name", Matchers.is("Mario"));
         // @formatter:on

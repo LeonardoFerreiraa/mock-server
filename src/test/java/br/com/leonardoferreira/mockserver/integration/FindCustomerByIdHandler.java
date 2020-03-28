@@ -1,8 +1,9 @@
 package br.com.leonardoferreira.mockserver.integration;
 
+import br.com.leonardoferreira.mockserver.RequestHandler;
+import br.com.leonardoferreira.mockserver.entity.Header;
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;
-import br.com.leonardoferreira.mockserver.RequestHandler;
 import br.com.leonardoferreira.mockserver.entity.RequestPattern;
 import br.com.leonardoferreira.mockserver.entity.Response;
 
@@ -23,6 +24,9 @@ public class FindCustomerByIdHandler implements RequestHandler {
         return Response.builder()
                 .status(200)
                 .body(response)
+                .headers(
+                        Header.of("x-custom-header", "customvalue")
+                )
                 .build();
     }
 

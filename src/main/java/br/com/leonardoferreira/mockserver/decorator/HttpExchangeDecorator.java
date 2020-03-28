@@ -2,7 +2,10 @@ package br.com.leonardoferreira.mockserver.decorator;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Optional;
 
+import br.com.leonardoferreira.mockserver.entity.Header;
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;
 import br.com.leonardoferreira.mockserver.entity.Response;
@@ -29,13 +32,21 @@ public class HttpExchangeDecorator implements AutoCloseable {
 
     @SneakyThrows
     public void respond(final Response response) {
-        addHeader("Content-Type", "application/json");
+        addHeader(Header.of("Content-Type", "application/json"));
+
+        Optional.ofNullable(response.getHeaders())
+                .stream()
+                .flatMap(List::stream)
+                .forEach(this::addHeader);
+
         setBody(response.getStatus(), objectMapper.writeValueAsBytes(response.getBody()));
     }
 
-    private void addHeader(final String key, final String value) {
+    private void addHeader(final Header header) {
         final Headers headers = exchange.getResponseHeaders();
-        headers.add(key, value);
+        for (final String headerValue : header.getValues()) {
+            headers.add(header.getKey(), headerValue);
+        }
     }
 
     private void setBody(final int status, final byte[] responseBytes) throws IOException {

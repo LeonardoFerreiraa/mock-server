@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor(staticName = "from")
+@RequiredArgsConstructor(staticName = "of")
 public class Pair<A, B> {
 
     private final A first;

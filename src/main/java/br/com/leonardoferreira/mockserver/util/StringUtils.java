@@ -10,10 +10,10 @@ public class StringUtils {
         }
 
         if (split.length == 1) {
-            return Pair.from(split[0], null);
+            return Pair.of(split[0], null);
         }
 
-        return Pair.from(split[0], split[1]);
+        return Pair.of(split[0], split[1]);
     }
 
 }

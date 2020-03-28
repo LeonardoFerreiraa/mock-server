@@ -7,7 +7,6 @@ import br.com.leonardoferreira.mockserver.matcher.QueryParamMatcher;
 import br.com.leonardoferreira.mockserver.matcher.UrnMatcher;
 import br.com.leonardoferreira.mockserver.util.CollectionUtils;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
@@ -32,7 +31,6 @@ public class RequestPattern {
         return QueryParamMatcher.from(CollectionUtils.concat(queryParams, url.getQueryParams()));
     }
 
-    @NoArgsConstructor
     public static class Builder {
 
         private HttpMethod method;
