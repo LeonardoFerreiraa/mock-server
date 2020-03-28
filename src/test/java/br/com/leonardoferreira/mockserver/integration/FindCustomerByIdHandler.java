@@ -22,11 +22,9 @@ public class FindCustomerByIdHandler implements RequestHandler {
 
     @Override
     public Response handle(final Request request) {
-        final Customer response = new Customer("Mario");
-
         return Response.builder()
                 .status(200)
-                .body(response)
+                .body(new Customer("Mario"))
                 .headers(
                         Header.of("x-custom-header", "customvalue")
                 )
