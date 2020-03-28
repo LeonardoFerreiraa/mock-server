@@ -11,7 +11,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(staticName = "from")
 public class DefaultHttpHandler implements HttpHandler {
 
     private final List<RequestHandler> handlers;

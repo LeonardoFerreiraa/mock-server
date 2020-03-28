@@ -29,8 +29,10 @@ public class MockServer {
                 0
         );
 
-        final DefaultHttpHandler httpHandler = new DefaultHttpHandler(handlers);
-        server.createContext(basePath, httpHandler);
+        server.createContext(
+                basePath,
+                DefaultHttpHandler.from(handlers)
+        );
 
         server.start();
     }

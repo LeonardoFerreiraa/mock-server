@@ -10,7 +10,7 @@ import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;
 import br.com.leonardoferreira.mockserver.entity.Response;
 import br.com.leonardoferreira.mockserver.entity.Url;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.leonardoferreira.mockserver.util.Json;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,6 @@ import lombok.SneakyThrows;
 public class HttpExchangeDecorator implements AutoCloseable {
 
     private final HttpExchange exchange;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public Request toRequest() {
         return Request.builder()
@@ -40,7 +38,7 @@ public class HttpExchangeDecorator implements AutoCloseable {
                 .flatMap(List::stream)
                 .forEach(this::addHeader);
 
-        setBody(response.getStatus(), objectMapper.writeValueAsBytes(response.getBody()));
+        setBody(response);
     }
 
     private void addHeader(final Header header) {
@@ -50,10 +48,18 @@ public class HttpExchangeDecorator implements AutoCloseable {
         }
     }
 
-    private void setBody(final int status, final byte[] responseBytes) throws IOException {
-        exchange.sendResponseHeaders(status, responseBytes.length);
-        try (final OutputStream responseBody = exchange.getResponseBody()) {
-            responseBody.write(responseBytes);
+    private void setBody(final Response response) throws IOException {
+        final byte[] responseBytes = Optional.ofNullable(response.getBody())
+                .map(Json::toJson)
+                .orElse(null);
+
+        if (responseBytes == null) {
+            exchange.sendResponseHeaders(response.getStatus(), 0);
+        } else {
+            exchange.sendResponseHeaders(response.getStatus(), responseBytes.length);
+            try (final OutputStream responseBody = exchange.getResponseBody()) {
+                responseBody.write(responseBytes);
+            }
         }
     }
 
@@ -61,4 +67,5 @@ public class HttpExchangeDecorator implements AutoCloseable {
     public void close() throws Exception {
         exchange.close();
     }
+
 }

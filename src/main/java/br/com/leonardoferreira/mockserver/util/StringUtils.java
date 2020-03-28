@@ -2,7 +2,11 @@ package br.com.leonardoferreira.mockserver.util;
 
 import java.util.Objects;
 
-public class StringUtils {
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public final class StringUtils {
 
     public static Pair<String, String> toPair(final String str, final String splitBy) {
         final String[] split = str.split(splitBy, 2);
