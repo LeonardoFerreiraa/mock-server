@@ -1,9 +1,10 @@
-package br.com.leonardoferreira.lib;
+package br.com.leonardoferreira.mockserver.matcher;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import br.com.leonardoferreira.user.QueryParam;
+import br.com.leonardoferreira.mockserver.entity.QueryParam;
+import br.com.leonardoferreira.mockserver.matcher.QueryParamMatcher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

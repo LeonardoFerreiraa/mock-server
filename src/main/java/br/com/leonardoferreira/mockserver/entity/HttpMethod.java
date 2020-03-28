@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.user;
+package br.com.leonardoferreira.mockserver.entity;
 
 public enum HttpMethod {
     GET,

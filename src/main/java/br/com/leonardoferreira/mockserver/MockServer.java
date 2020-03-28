@@ -1,16 +1,14 @@
-package br.com.leonardoferreira.user;
+package br.com.leonardoferreira.mockserver;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.leonardoferreira.lib.DefaultHttpHandler;
-import br.com.leonardoferreira.util.Try;
 import com.sun.net.httpserver.HttpServer;
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(staticName = "create")
 public class MockServer {
 
     private String hostname = "localhost";
@@ -23,16 +21,11 @@ public class MockServer {
 
     private HttpServer server;
 
-    public static MockServer create() {
-        return new MockServer();
-    }
-
+    @SneakyThrows
     public MockServer start() {
-        server = Try.silently(() ->
-                HttpServer.create(
-                        new InetSocketAddress(hostname, port),
-                        0
-                )
+        server = HttpServer.create(
+                new InetSocketAddress(hostname, port),
+                0
         );
 
         final DefaultHttpHandler httpHandler = new DefaultHttpHandler(handlers);
@@ -71,4 +64,5 @@ public class MockServer {
     public void stop() {
         server.stop(0);
     }
+
 }

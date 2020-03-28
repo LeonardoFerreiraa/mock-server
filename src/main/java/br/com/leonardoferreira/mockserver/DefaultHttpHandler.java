@@ -1,15 +1,12 @@
-package br.com.leonardoferreira.lib;
+package br.com.leonardoferreira.mockserver;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import br.com.leonardoferreira.user.Request;
-import br.com.leonardoferreira.user.RequestHandler;
-import br.com.leonardoferreira.user.RequestMatcher;
-import br.com.leonardoferreira.user.Response;
+import br.com.leonardoferreira.mockserver.decorator.HttpExchangeDecorator;
+import br.com.leonardoferreira.mockserver.entity.Request;
+import br.com.leonardoferreira.mockserver.entity.RequestPattern;
+import br.com.leonardoferreira.mockserver.entity.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -18,7 +15,7 @@ public class DefaultHttpHandler implements HttpHandler {
 
     private final ObjectMapper objectMapper;
 
-    private final Map<RequestMatcher, RequestHandler> handlers;
+    private final List<RequestHandler> handlers;
 
     public DefaultHttpHandler(final List<RequestHandler> handlers) {
         this(new ObjectMapper(), handlers);
@@ -26,8 +23,7 @@ public class DefaultHttpHandler implements HttpHandler {
 
     public DefaultHttpHandler(final ObjectMapper objectMapper, final List<RequestHandler> handlers) {
         this.objectMapper = objectMapper;
-        this.handlers = handlers.stream()
-                .collect(Collectors.toMap(RequestHandler::matcher, Function.identity()));
+        this.handlers = handlers;
     }
 
     @Override
@@ -43,22 +39,20 @@ public class DefaultHttpHandler implements HttpHandler {
     private void handle(final HttpExchangeDecorator exchange) throws IOException {
         final Request request = exchange.toRequest();
 
-        final Response response = handlers.entrySet()
-                .stream()
-                .filter(entry -> match(entry.getKey(), request))
-                .map(entry -> entry.getValue().handle(request))
+        final Response response = handlers.stream()
+                .filter(handler -> match(handler.pattern(), request))
+                .map(handler -> handler.handle(request))
                 .findFirst()
                 .orElse(Response.notFound());
+
         exchange.addHeader("Content-Type", "application/json");
         exchange.setBody(response.getStatus(), objectMapper.writeValueAsBytes(response.getBody()));
     }
 
-    private boolean match(final RequestMatcher requestMatcher, final Request request) {
-        if (requestMatcher.getMethod() == request.getMethod()) {
-            final Url requestedUrl = Url.from(request.getUrl());
-
-            if (requestMatcher.getUrlMatcher().match(requestedUrl.getUrn())) {
-                if (requestMatcher.getQueryParamMatch().match(requestedUrl.getQueryParams())) {
+    private boolean match(final RequestPattern requestPattern, final Request request) {
+        if (requestPattern.getMethod() == request.getMethod()) {
+            if (requestPattern.getUrlMatcher().match(request.getUrl().getUrn())) {
+                if (requestPattern.getQueryParamMatch().match(request.getUrl().getQueryParams())) {
                     return true;
                 }
             }

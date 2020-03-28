@@ -1,10 +1,10 @@
-package br.com.leonardoferreira.lib;
+package br.com.leonardoferreira.mockserver.matcher;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import br.com.leonardoferreira.user.QueryParam;
+import br.com.leonardoferreira.mockserver.entity.QueryParam;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

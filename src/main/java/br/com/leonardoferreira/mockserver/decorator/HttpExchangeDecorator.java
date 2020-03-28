@@ -1,9 +1,10 @@
-package br.com.leonardoferreira.lib;
+package br.com.leonardoferreira.mockserver.decorator;
 
 import java.io.IOException;
 
-import br.com.leonardoferreira.user.HttpMethod;
-import br.com.leonardoferreira.user.Request;
+import br.com.leonardoferreira.mockserver.entity.HttpMethod;
+import br.com.leonardoferreira.mockserver.entity.Request;
+import br.com.leonardoferreira.mockserver.entity.Url;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +16,7 @@ public class HttpExchangeDecorator {
     public Request toRequest() {
         return Request.builder()
                 .method(HttpMethod.valueOf(exchange.getRequestMethod()))
-                .url(exchange.getRequestURI().toString())
+                .url(Url.from(exchange.getRequestURI().toString()))
                 .build();
     }
 

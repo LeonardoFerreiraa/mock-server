@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.user;
+package br.com.leonardoferreira.mockserver.entity;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.user;
+package br.com.leonardoferreira.mockserver.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,6 @@ public class Request {
 
     private final HttpMethod method;
 
-    private final String url;
+    private final Url url;
 
 }

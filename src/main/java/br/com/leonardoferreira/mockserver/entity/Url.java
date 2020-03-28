@@ -1,9 +1,8 @@
-package br.com.leonardoferreira.lib;
+package br.com.leonardoferreira.mockserver.entity;
 
 import java.net.URI;
 import java.util.List;
 
-import br.com.leonardoferreira.user.QueryParam;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

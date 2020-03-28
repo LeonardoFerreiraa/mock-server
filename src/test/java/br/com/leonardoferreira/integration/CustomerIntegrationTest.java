@@ -1,6 +1,6 @@
 package br.com.leonardoferreira.integration;
 
-import br.com.leonardoferreira.user.MockServer;
+import br.com.leonardoferreira.mockserver.MockServer;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

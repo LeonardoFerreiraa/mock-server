@@ -1,17 +1,17 @@
-package br.com.leonardoferreira.user;
+package br.com.leonardoferreira.mockserver.entity;
 
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.leonardoferreira.lib.QueryParamMatcher;
-import br.com.leonardoferreira.lib.UrnMatcher;
+import br.com.leonardoferreira.mockserver.matcher.QueryParamMatcher;
+import br.com.leonardoferreira.mockserver.matcher.UrnMatcher;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class RequestMatcher {
+public class RequestPattern {
 
     private final HttpMethod method;
 
@@ -55,8 +55,8 @@ public class RequestMatcher {
             return this;
         }
 
-        public RequestMatcher build() {
-            return new RequestMatcher(method, url, queryParams);
+        public RequestPattern build() {
+            return new RequestPattern(method, url, queryParams);
         }
 
     }

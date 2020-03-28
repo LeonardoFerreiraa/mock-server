@@ -2,18 +2,18 @@ package br.com.leonardoferreira.integration;
 
 import java.util.Collections;
 
-import br.com.leonardoferreira.user.HttpMethod;
-import br.com.leonardoferreira.user.QueryParam;
-import br.com.leonardoferreira.user.Request;
-import br.com.leonardoferreira.user.RequestHandler;
-import br.com.leonardoferreira.user.RequestMatcher;
-import br.com.leonardoferreira.user.Response;
+import br.com.leonardoferreira.mockserver.entity.HttpMethod;
+import br.com.leonardoferreira.mockserver.entity.QueryParam;
+import br.com.leonardoferreira.mockserver.entity.Request;
+import br.com.leonardoferreira.mockserver.RequestHandler;
+import br.com.leonardoferreira.mockserver.entity.RequestPattern;
+import br.com.leonardoferreira.mockserver.entity.Response;
 
 public class FindAllCustomerHandler implements RequestHandler {
 
     @Override
-    public RequestMatcher matcher() {
-        return RequestMatcher.builder()
+    public RequestPattern pattern() {
+        return RequestPattern.builder()
                 .method(HttpMethod.GET)
                 .url("/customer")
                 .queryParams(QueryParam.of(
