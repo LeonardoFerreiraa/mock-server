@@ -3,15 +3,31 @@ package br.com.leonardoferreira.mockserver.integration;
 import br.com.leonardoferreira.mockserver.MockServer;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class CustomerIntegrationTest {
 
+    @BeforeAll
+    static void beforeAll() {
+        MockServer.start();
+    }
+
+    @AfterEach
+    void tearDown() {
+        MockServer.clearHandlers();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        MockServer.stop();
+    }
+
     @Test
     void shouldReturnSimpleResponse() {
-        final MockServer mockServer = MockServer.create()
-                .addHandler(new FindCustomerByIdHandler())
-                .start();
+        MockServer.addHandler(new FindCustomerByIdHandler());
 
         // @formatter:off
         RestAssured
@@ -26,15 +42,11 @@ class CustomerIntegrationTest {
                     .statusCode(200)
                     .body("name", Matchers.is("Mario"));
         // @formatter:on
-
-        mockServer.stop();
     }
 
     @Test
     void shouldFindAll() {
-        final MockServer mockServer = MockServer.create()
-                .addHandler(new FindAllCustomerHandler())
-                .start();
+        MockServer.addHandler(new FindAllCustomerHandler());
 
         // @formatter:off
         RestAssured
@@ -49,8 +61,6 @@ class CustomerIntegrationTest {
                     .statusCode(200)
                     .body("[0].name", Matchers.is("mario"));
         // @formatter:on
-
-        mockServer.stop();
     }
 
 }

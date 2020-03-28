@@ -5,24 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.net.httpserver.HttpServer;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
-@NoArgsConstructor(staticName = "create")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockServer {
 
-    private String hostname = "localhost";
+    private static String hostname = "localhost";
 
-    private int port = 8080;
+    private static int port = 8080;
 
-    private String basePath = "/";
+    private static String basePath = "/";
 
-    private List<RequestHandler> handlers = new ArrayList<>();
+    private static List<RequestHandler> handlers = new ArrayList<>();
 
-    private HttpServer server;
+    private static HttpServer server;
 
     @SneakyThrows
-    public MockServer start() {
+    public static void start() {
         server = HttpServer.create(
                 new InetSocketAddress(hostname, port),
                 0
@@ -32,36 +33,29 @@ public class MockServer {
         server.createContext(basePath, httpHandler);
 
         server.start();
-
-        return this;
     }
 
-    public MockServer hostname(final String hostname) {
-        this.hostname = hostname;
-        return this;
+    public static void hostname(final String hostname) {
+        MockServer.hostname = hostname;
     }
 
-    public MockServer port(final int port) {
-        this.port = port;
-        return this;
+    public static void port(final int port) {
+        MockServer.port = port;
     }
 
-    public MockServer basePath(final String basePath) {
-        this.basePath = basePath;
-        return this;
+    public static void basePath(final String basePath) {
+        MockServer.basePath = basePath;
     }
 
-    public MockServer addHandler(final RequestHandler requestHandler) {
-        this.handlers.add(requestHandler);
-        return this;
+    public static void addHandler(final RequestHandler requestHandler) {
+        MockServer.handlers.add(requestHandler);
     }
 
-    public MockServer clearHandlers() {
-        this.handlers.clear();
-        return this;
+    public static void clearHandlers() {
+        MockServer.handlers.clear();
     }
 
-    public void stop() {
+    public static void stop() {
         server.stop(0);
     }
 
