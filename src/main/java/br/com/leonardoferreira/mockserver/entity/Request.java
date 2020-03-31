@@ -13,7 +13,9 @@ public class Request {
 
     private final HttpMethod method;
 
-    private final Url url;
+    private final String urn;
+
+    private final List<QueryParam> queryParams;
 
     private final List<Header> headers;
 

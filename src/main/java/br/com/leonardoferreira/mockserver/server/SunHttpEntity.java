@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.mockserver.decorator;
+package br.com.leonardoferreira.mockserver.server;
 
 import java.io.OutputStream;
 import java.util.Optional;
@@ -15,32 +15,37 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @RequiredArgsConstructor(staticName = "from")
-public class HttpExchangeDecorator {
+class SunHttpEntity implements HttpEntity {
 
     private final HttpExchange exchange;
 
-    public Request toRequest() {
+    @Override
+    public Request getRequest() {
+        final Url url = Url.from(exchange.getRequestURI().toString());
+
         return Request.builder()
                 .method(HttpMethod.valueOf(exchange.getRequestMethod()))
-                .url(Url.from(exchange.getRequestURI().toString()))
+                .urn(url.getUrn())
+                .queryParams(url.getQueryParams())
                 .headers(Header.from(exchange.getRequestHeaders()))
                 .build();
     }
 
+    @Override
     public void dispatchResponse(final Response response) {
-        addHeader(Header.of("Content-Type", "application/json"));
+        addResponseHeader(Header.of("Content-Type", "application/json"));
 
         if (response.getHeaders() != null) {
             response.getHeaders()
-                    .forEach(this::addHeader);
+                    .forEach(this::addResponseHeader);
         }
 
-        setBody(response);
+        writeResponseBody(response);
 
         exchange.close();
     }
 
-    private void addHeader(final Header header) {
+    private void addResponseHeader(final Header header) {
         final Headers headers = exchange.getResponseHeaders();
         for (final String headerValue : header.getValues()) {
             headers.add(header.getKey(), headerValue);
@@ -48,7 +53,7 @@ public class HttpExchangeDecorator {
     }
 
     @SneakyThrows
-    private void setBody(final Response response) {
+    private void writeResponseBody(final Response response) {
         final byte[] responseBytes = Optional.ofNullable(response.getBody())
                 .map(Json::toJson)
                 .orElse(null);

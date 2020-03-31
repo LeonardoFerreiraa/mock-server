@@ -1,10 +1,9 @@
 package br.com.leonardoferreira.mockserver;
 
-import java.net.InetSocketAddress;
 import java.util.Arrays;
 
-import br.com.leonardoferreira.mockserver.decorator.HttpExchangeDecorator;
-import com.sun.net.httpserver.HttpServer;
+import br.com.leonardoferreira.mockserver.server.WebServer;
+import br.com.leonardoferreira.mockserver.server.WebServerConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,21 +19,21 @@ public class MockServer {
 
     private static RequestDispatcher requestDispatcher = new RequestDispatcher();
 
-    private static HttpServer server;
+    private static WebServer server;
 
     @SneakyThrows
     public static void start() {
-        server = HttpServer.create(
-                new InetSocketAddress(hostname, port),
-                0
-        );
-
-        server.createContext(
-                basePath,
-                exchange -> requestDispatcher.dispatch(HttpExchangeDecorator.from(exchange))
-        );
+        server = WebServer.create(buildConfig(), requestDispatcher::dispatch);
 
         server.start();
+    }
+
+    private static WebServerConfig buildConfig() {
+        return WebServerConfig.builder()
+                .basePath(basePath)
+                .hostname(hostname)
+                .port(port)
+                .build();
     }
 
     public static void hostname(final String hostname) {
@@ -62,7 +61,7 @@ public class MockServer {
     }
 
     public static void stop() {
-        server.stop(0);
+        server.stop();
     }
 
 }

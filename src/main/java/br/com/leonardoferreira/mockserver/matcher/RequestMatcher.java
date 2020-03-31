@@ -63,7 +63,7 @@ public class RequestMatcher {
 
         private boolean urnMatches(final Request request) {
             final UrnMatcher urnMatcher = requestPattern.getUrlMatcher();
-            final String requestedUrn = request.getUrl().getUrn();
+            final String requestedUrn = request.getUrn();
 
             return urnMatcher.match(requestedUrn);
         }
@@ -82,7 +82,7 @@ public class RequestMatcher {
 
         private boolean queryParamMatches(final Request request) {
             final QueryParamMatcher queryParamMatch = requestPattern.getQueryParamMatcher();
-            final List<QueryParam> requestedQueryParams = request.getUrl().getQueryParams();
+            final List<QueryParam> requestedQueryParams = request.getQueryParams();
 
             return queryParamMatch.match(requestedQueryParams);
         }

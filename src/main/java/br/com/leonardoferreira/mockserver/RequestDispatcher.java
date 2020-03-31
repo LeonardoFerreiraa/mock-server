@@ -3,10 +3,11 @@ package br.com.leonardoferreira.mockserver;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.leonardoferreira.mockserver.decorator.HttpExchangeDecorator;
 import br.com.leonardoferreira.mockserver.entity.Request;
 import br.com.leonardoferreira.mockserver.entity.Response;
 import br.com.leonardoferreira.mockserver.matcher.RequestMatcher;
+import br.com.leonardoferreira.mockserver.server.HttpEntity;
+import br.com.leonardoferreira.mockserver.util.CollectionUtils;
 import br.com.leonardoferreira.mockserver.util.Outcome;
 import lombok.NonNull;
 
@@ -26,16 +27,16 @@ public class RequestDispatcher {
         this.handlers.clear();
     }
 
-    public void dispatch(final HttpExchangeDecorator exchange) {
-        final Request request = exchange.toRequest();
+    public void dispatch(final HttpEntity httpEntity) {
+        final Request request = httpEntity.getRequest();
 
-        final RequestHandler requestHandler = handlers.stream()
-                .filter(handler -> RequestMatcher.from(handler.pattern()).match(request))
-                .findFirst()
-                .orElse(null);
+        final RequestHandler requestHandler = CollectionUtils.findFirst(
+                handlers,
+                handler -> RequestMatcher.from(handler.pattern()).match(request)
+        );
 
         final Response response = dispatch(requestHandler, request);
-        exchange.dispatchResponse(response);
+        httpEntity.dispatchResponse(response);
     }
 
     private Response dispatch(final RequestHandler handler, final Request request) {

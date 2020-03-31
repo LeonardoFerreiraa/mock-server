@@ -2,6 +2,7 @@ package br.com.leonardoferreira.mockserver.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,16 @@ public final class CollectionUtils {
         }
 
         return result;
+    }
+
+    public static <T> T findFirst(final List<T> elements, final Predicate<T> predicate) {
+        for (final T element : elements) {
+            if (predicate.test(element)) {
+                return element;
+            }
+        }
+
+        return null;
     }
 
 }
