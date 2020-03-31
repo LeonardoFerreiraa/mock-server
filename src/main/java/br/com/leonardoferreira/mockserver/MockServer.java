@@ -1,9 +1,9 @@
 package br.com.leonardoferreira.mockserver;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
+import br.com.leonardoferreira.mockserver.decorator.HttpExchangeDecorator;
 import com.sun.net.httpserver.HttpServer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class MockServer {
 
     private static String basePath = "/";
 
-    private static List<RequestHandler> handlers = new ArrayList<>();
+    private static RequestDispatcher requestDispatcher = new RequestDispatcher();
 
     private static HttpServer server;
 
@@ -31,7 +31,7 @@ public class MockServer {
 
         server.createContext(
                 basePath,
-                DefaultHttpHandler.from(handlers)
+                exchange -> requestDispatcher.dispatch(HttpExchangeDecorator.from(exchange))
         );
 
         server.start();
@@ -50,11 +50,15 @@ public class MockServer {
     }
 
     public static void addHandler(final RequestHandler requestHandler) {
-        MockServer.handlers.add(requestHandler);
+        MockServer.requestDispatcher.addHandler(requestHandler);
     }
 
-    public static void clearHandlers() {
-        MockServer.handlers.clear();
+    public static void addHandlers(final RequestHandler... requestHandler) {
+        MockServer.requestDispatcher.addHandlers(Arrays.asList(requestHandler));
+    }
+
+    public static void cleanHandlers() {
+        MockServer.requestDispatcher.cleanHandlers();
     }
 
     public static void stop() {

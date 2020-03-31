@@ -17,7 +17,7 @@ class CustomerIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        MockServer.clearHandlers();
+        MockServer.cleanHandlers();
     }
 
     @AfterAll

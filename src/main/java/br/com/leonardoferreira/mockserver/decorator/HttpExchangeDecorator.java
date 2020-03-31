@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.mockserver.decorator;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
 
@@ -28,8 +27,7 @@ public class HttpExchangeDecorator {
                 .build();
     }
 
-    @SneakyThrows
-    public void respond(final Response response) {
+    public void dispatchResponse(final Response response) {
         addHeader(Header.of("Content-Type", "application/json"));
 
         if (response.getHeaders() != null) {
@@ -38,6 +36,8 @@ public class HttpExchangeDecorator {
         }
 
         setBody(response);
+
+        exchange.close();
     }
 
     private void addHeader(final Header header) {
@@ -47,7 +47,8 @@ public class HttpExchangeDecorator {
         }
     }
 
-    private void setBody(final Response response) throws IOException {
+    @SneakyThrows
+    private void setBody(final Response response) {
         final byte[] responseBytes = Optional.ofNullable(response.getBody())
                 .map(Json::toJson)
                 .orElse(null);
@@ -60,10 +61,6 @@ public class HttpExchangeDecorator {
                 responseBody.write(responseBytes);
             }
         }
-    }
-
-    public void close() {
-        exchange.close();
     }
 
 }
