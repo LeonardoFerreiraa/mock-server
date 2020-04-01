@@ -4,7 +4,7 @@
 
     <groupId>br.com.leonardoferreira</groupId>
     <artifactId>mock-server</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <packaging>jar</packaging>
     <name>Mock Server</name>
@@ -27,7 +27,7 @@
         <url>git@github.com:leonardoferreiraa/mock-server.git</url>
         <connection>scm:git:git@github.com:leonardoferreiraa/mock-server.git</connection>
         <developerConnection>scm:git:git@github.com:leonardoferreiraa/mock-server.git</developerConnection>
-        <tag>mock-server-1.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <licenses>
