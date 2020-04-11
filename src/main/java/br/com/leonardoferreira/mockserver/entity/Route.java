@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class RequestPattern {
+public class Route {
 
     private final HttpMethod method;
 
@@ -31,7 +31,7 @@ public class RequestPattern {
     }
 
     public QueryParamMatcher getQueryParamMatcher() {
-        return QueryParamMatcher.from(CollectionUtils.concat(queryParams, url.getQueryParams()));
+        return QueryParamMatcher.from(CollectionUtils.concat(queryParams, url.getQueryParams().values()));
     }
 
     public HeaderMatcher toHeaderMatcher() {
@@ -68,8 +68,8 @@ public class RequestPattern {
             return this;
         }
 
-        public RequestPattern build() {
-            return new RequestPattern(method, url, queryParams, headers);
+        public Route build() {
+            return new Route(method, url, queryParams, headers);
         }
 
     }

@@ -2,9 +2,7 @@ package br.com.leonardoferreira.mockserver.entity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.mockserver.util.StringUtils;
 import lombok.Data;
@@ -20,13 +18,6 @@ public class Header {
 
     public static Header of(final String key, final String... values) {
         return new Header(key, Arrays.asList(values));
-    }
-
-    public static List<Header> from(final Map<String, List<String>> headers) {
-        return headers.entrySet()
-                .stream()
-                .map(entry -> new Header(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
     }
 
     @Override
