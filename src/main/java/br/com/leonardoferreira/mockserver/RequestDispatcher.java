@@ -8,19 +8,17 @@ import br.com.leonardoferreira.mockserver.entity.Response;
 import br.com.leonardoferreira.mockserver.matcher.RequestMatcher;
 import br.com.leonardoferreira.mockserver.server.HttpEntity;
 import br.com.leonardoferreira.mockserver.util.CollectionUtils;
-import br.com.leonardoferreira.mockserver.util.Outcome;
 import lombok.NonNull;
 
 public class RequestDispatcher {
 
-    private final List<RequestHandler> handlers = new ArrayList<>();
+    private final List<RequestHandlerDecorator> handlers = new ArrayList<>();
 
-    public void addHandler(@NonNull final RequestHandler requestHandler) {
-        this.handlers.add(requestHandler);
-    }
+    public RequestHandlerJournal addHandler(@NonNull final RequestHandler requestHandler) {
+        final RequestHandlerDecorator requestHandlerDecorator = RequestHandlerDecorator.of(requestHandler);
+        handlers.add(requestHandlerDecorator);
 
-    public void addHandlers(@NonNull final List<RequestHandler> handlers) {
-        this.handlers.addAll(handlers);
+        return requestHandlerDecorator.getJournal();
     }
 
     public void cleanHandlers() {
@@ -30,21 +28,21 @@ public class RequestDispatcher {
     public void dispatch(final HttpEntity httpEntity) {
         final Request request = httpEntity.getRequest();
 
-        final RequestHandler requestHandler = CollectionUtils.findFirst(
+        final RequestHandlerDecorator requestHandler = CollectionUtils.findFirst(
                 handlers,
-                handler -> RequestMatcher.from(handler.pattern()).match(request)
+                handler -> RequestMatcher.from(handler.route()).match(request)
         );
 
         final Response response = dispatch(requestHandler, request);
         httpEntity.dispatchResponse(response);
     }
 
-    private Response dispatch(final RequestHandler handler, final Request request) {
-        if (handler == null) {
+    private Response dispatch(final RequestHandlerDecorator requestHandler, final Request request) {
+        if (requestHandler == null) {
             return Response.notFound();
         }
 
-        return Outcome.from(() -> handler.handle(request))
-                .onErrorReturn(e -> Response.internalServerError(e.getMessage()));
+        return requestHandler.handle(request);
     }
+
 }

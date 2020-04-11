@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.mockserver.integration;
+package br.com.leonardoferreira.mockserver.integration.requesthandler;
 
 import java.util.Collections;
 
@@ -6,14 +6,15 @@ import br.com.leonardoferreira.mockserver.RequestHandler;
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.QueryParam;
 import br.com.leonardoferreira.mockserver.entity.Request;
-import br.com.leonardoferreira.mockserver.entity.RequestPattern;
+import br.com.leonardoferreira.mockserver.entity.Route;
 import br.com.leonardoferreira.mockserver.entity.Response;
+import br.com.leonardoferreira.mockserver.integration.domain.Customer;
 
-public class FindAllCustomerHandler implements RequestHandler {
+public class FindAllCustomerRequestHandler implements RequestHandler {
 
     @Override
-    public RequestPattern pattern() {
-        return RequestPattern.builder()
+    public Route route() {
+        return Route.builder()
                 .method(HttpMethod.GET)
                 .url("/customer?name=mario")
                 .queryParams(

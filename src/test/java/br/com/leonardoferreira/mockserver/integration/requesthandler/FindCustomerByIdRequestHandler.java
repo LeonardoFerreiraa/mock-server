@@ -1,17 +1,18 @@
-package br.com.leonardoferreira.mockserver.integration;
+package br.com.leonardoferreira.mockserver.integration.requesthandler;
 
 import br.com.leonardoferreira.mockserver.RequestHandler;
 import br.com.leonardoferreira.mockserver.entity.Header;
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;
-import br.com.leonardoferreira.mockserver.entity.RequestPattern;
+import br.com.leonardoferreira.mockserver.entity.Route;
 import br.com.leonardoferreira.mockserver.entity.Response;
+import br.com.leonardoferreira.mockserver.integration.domain.Customer;
 
-public class FindCustomerByIdHandler implements RequestHandler {
+public class FindCustomerByIdRequestHandler implements RequestHandler {
 
     @Override
-    public RequestPattern pattern() {
-        return RequestPattern.builder()
+    public Route route() {
+        return Route.builder()
                 .method(HttpMethod.GET)
                 .url("/customer/{id}")
                 .headers(
@@ -30,6 +31,5 @@ public class FindCustomerByIdHandler implements RequestHandler {
                 )
                 .build();
     }
-
 
 }

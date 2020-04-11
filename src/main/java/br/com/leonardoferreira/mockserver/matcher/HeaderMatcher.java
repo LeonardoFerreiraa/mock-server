@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.mockserver.matcher;
 
+import java.util.Collection;
 import java.util.List;
 
 import br.com.leonardoferreira.mockserver.entity.Header;
@@ -10,7 +11,7 @@ public class HeaderMatcher {
 
     private final List<Header> headers;
 
-    public boolean match(final List<Header> requestedHeaders) {
+    public boolean match(final Collection<Header> requestedHeaders) {
         if (headers == null) {
             return true;
         }

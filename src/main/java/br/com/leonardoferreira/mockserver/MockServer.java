@@ -1,7 +1,5 @@
 package br.com.leonardoferreira.mockserver;
 
-import java.util.Arrays;
-
 import br.com.leonardoferreira.mockserver.server.WebServer;
 import br.com.leonardoferreira.mockserver.server.WebServerConfig;
 import lombok.AccessLevel;
@@ -48,12 +46,8 @@ public class MockServer {
         MockServer.basePath = basePath;
     }
 
-    public static void addHandler(final RequestHandler requestHandler) {
-        MockServer.requestDispatcher.addHandler(requestHandler);
-    }
-
-    public static void addHandlers(final RequestHandler... requestHandler) {
-        MockServer.requestDispatcher.addHandlers(Arrays.asList(requestHandler));
+    public static RequestHandlerJournal addHandler(final RequestHandler requestHandler) {
+        return MockServer.requestDispatcher.addHandler(requestHandler);
     }
 
     public static void cleanHandlers() {

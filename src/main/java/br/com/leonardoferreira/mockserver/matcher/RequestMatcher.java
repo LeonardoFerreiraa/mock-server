@@ -1,17 +1,18 @@
 package br.com.leonardoferreira.mockserver.matcher;
 
-import java.util.List;
+import java.util.Collection;
 
 import br.com.leonardoferreira.mockserver.entity.Header;
+import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.QueryParam;
 import br.com.leonardoferreira.mockserver.entity.Request;
-import br.com.leonardoferreira.mockserver.entity.RequestPattern;
+import br.com.leonardoferreira.mockserver.entity.Route;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "from")
 public class RequestMatcher {
 
-    private final RequestPattern requestPattern;
+    private final Route route;
 
     public boolean match(final Request request) {
         final RequestMatcherChain requestMatcherChain = createRequestMatcherChain();
@@ -46,7 +47,8 @@ public class RequestMatcher {
         }
 
         private boolean methodMatches(final Request request) {
-            return requestPattern.getMethod() == request.getMethod();
+            return route.getMethod() == HttpMethod.ANY ||
+                    route.getMethod() == request.getMethod();
         }
 
     }
@@ -62,7 +64,7 @@ public class RequestMatcher {
         }
 
         private boolean urnMatches(final Request request) {
-            final UrnMatcher urnMatcher = requestPattern.getUrlMatcher();
+            final UrnMatcher urnMatcher = route.getUrlMatcher();
             final String requestedUrn = request.getUrn();
 
             return urnMatcher.match(requestedUrn);
@@ -81,8 +83,8 @@ public class RequestMatcher {
         }
 
         private boolean queryParamMatches(final Request request) {
-            final QueryParamMatcher queryParamMatch = requestPattern.getQueryParamMatcher();
-            final List<QueryParam> requestedQueryParams = request.getQueryParams();
+            final QueryParamMatcher queryParamMatch = route.getQueryParamMatcher();
+            final Collection<QueryParam> requestedQueryParams = request.getQueryParams().values();
 
             return queryParamMatch.match(requestedQueryParams);
         }
@@ -101,8 +103,8 @@ public class RequestMatcher {
         }
 
         private boolean headerMatches(final Request request) {
-            final HeaderMatcher headerMatcher = requestPattern.toHeaderMatcher();
-            final List<Header> requestedHeaders = request.getHeaders();
+            final HeaderMatcher headerMatcher = route.toHeaderMatcher();
+            final Collection<Header> requestedHeaders = request.getHeaders().values();
 
             return headerMatcher.match(requestedHeaders);
         }

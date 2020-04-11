@@ -24,4 +24,8 @@ public final class Json {
         return objectMapper.writeValueAsBytes(object);
     }
 
+    @SneakyThrows
+    public static <T> T read(final byte[] json, final Class<T> clazz) {
+        return objectMapper.readValue(json, clazz);
+    }
 }

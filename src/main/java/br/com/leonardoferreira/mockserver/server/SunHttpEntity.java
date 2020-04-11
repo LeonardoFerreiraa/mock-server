@@ -4,12 +4,13 @@ import java.io.OutputStream;
 import java.util.Optional;
 
 import br.com.leonardoferreira.mockserver.entity.Header;
+import br.com.leonardoferreira.mockserver.entity.Headers;
 import br.com.leonardoferreira.mockserver.entity.HttpMethod;
 import br.com.leonardoferreira.mockserver.entity.Request;
 import br.com.leonardoferreira.mockserver.entity.Response;
 import br.com.leonardoferreira.mockserver.entity.Url;
+import br.com.leonardoferreira.mockserver.util.IOUtils;
 import br.com.leonardoferreira.mockserver.util.Json;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -21,13 +22,11 @@ class SunHttpEntity implements HttpEntity {
 
     @Override
     public Request getRequest() {
-        final Url url = Url.from(exchange.getRequestURI().toString());
-
         return Request.builder()
                 .method(HttpMethod.valueOf(exchange.getRequestMethod()))
-                .urn(url.getUrn())
-                .queryParams(url.getQueryParams())
-                .headers(Header.from(exchange.getRequestHeaders()))
+                .url(Url.from(exchange.getRequestURI().toString()))
+                .headers(Headers.from(exchange.getRequestHeaders()))
+                .body(IOUtils.inputStreamToByteArray(exchange.getRequestBody()))
                 .build();
     }
 
@@ -46,9 +45,8 @@ class SunHttpEntity implements HttpEntity {
     }
 
     private void addResponseHeader(final Header header) {
-        final Headers headers = exchange.getResponseHeaders();
         for (final String headerValue : header.getValues()) {
-            headers.add(header.getKey(), headerValue);
+            exchange.getResponseHeaders().add(header.getKey(), headerValue);
         }
     }
 
