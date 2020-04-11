@@ -2,11 +2,14 @@ package br.com.leonardoferreira.mockserver.util;
 
 import java.util.concurrent.Callable;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 
+@Log
 @Data
 @RequiredArgsConstructor
 public class Outcome<R, E> {
@@ -35,7 +38,7 @@ public class Outcome<R, E> {
         try {
             return Outcome.success(callable.call());
         } catch (final Exception e) {
-            e.printStackTrace();
+            log.log(Level.WARNING, "Error suppressed", e);
             return Outcome.error(e);
         }
     }

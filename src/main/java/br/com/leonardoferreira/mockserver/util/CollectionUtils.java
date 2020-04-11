@@ -5,11 +5,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CollectionUtils {
+
+    private CollectionUtils() {
+    }
 
     public static <T> List<T> concat(final Collection<T> first, final Collection<T> second) {
         final List<T> result = new ArrayList<>();

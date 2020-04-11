@@ -25,6 +25,7 @@ public class Headers extends DelegateMap<String, Header> {
         return new Headers(delegate);
     }
 
+    @Override
     protected String transformKey(final Object key) {
         return key == null ? null : key.toString().toLowerCase();
     }
