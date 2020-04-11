@@ -16,7 +16,7 @@ class RequestHandlerDecorator {
     @Getter
     private final RequestHandlerJournal journal;
 
-    public static RequestHandlerDecorator of(final RequestHandler handler) {
+    public static RequestHandlerDecorator from(final RequestHandler handler) {
         return new RequestHandlerDecorator(handler, new RequestHandlerJournal());
     }
 

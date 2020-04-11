@@ -15,7 +15,7 @@ public class RequestDispatcher {
     private final List<RequestHandlerDecorator> handlers = new ArrayList<>();
 
     public RequestHandlerJournal addHandler(@NonNull final RequestHandler requestHandler) {
-        final RequestHandlerDecorator requestHandlerDecorator = RequestHandlerDecorator.of(requestHandler);
+        final RequestHandlerDecorator requestHandlerDecorator = RequestHandlerDecorator.from(requestHandler);
         handlers.add(requestHandlerDecorator);
 
         return requestHandlerDecorator.getJournal();

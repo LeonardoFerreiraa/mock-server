@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.mockserver.entity;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,7 +10,7 @@ import br.com.leonardoferreira.mockserver.util.DelegateMap;
 public class Headers extends DelegateMap<String, Header> {
 
     public Headers(final Map<String, Header> delegate) {
-        super(delegate == null ? new HashMap<>() : delegate);
+        super(delegate);
     }
 
     public static Headers from(final Map<String, List<String>> headers) {
