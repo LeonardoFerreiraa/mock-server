@@ -3,7 +3,6 @@ package br.com.leonardoferreira.mockserver.entity;
 import br.com.leonardoferreira.mockserver.util.Pair;
 import br.com.leonardoferreira.mockserver.util.StringUtils;
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

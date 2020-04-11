@@ -23,7 +23,7 @@ public final class StringUtils {
     }
 
     public static boolean equalsIgnoreCase(final String a, final String b) {
-        return Objects.equals(a, b) || (a != null && a.equalsIgnoreCase(b));
+        return Objects.equals(a, b) || a != null && a.equalsIgnoreCase(b);
     }
 
 }

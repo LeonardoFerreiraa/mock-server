@@ -13,7 +13,7 @@ public abstract class DelegateMap<K, V> implements Map<K, V> {
         this.delegate = delegate == null ? new HashMap<>() : delegate;
     }
 
-    protected abstract K transformKey(final Object key);
+    protected abstract K transformKey(Object key);
 
     @Override
     public int size() {

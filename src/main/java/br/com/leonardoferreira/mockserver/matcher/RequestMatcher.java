@@ -96,7 +96,6 @@ public class RequestMatcher {
 
         private final RequestMatcherChain next;
 
-
         @Override
         public boolean check(final Request request) {
             return headerMatches(request) && next.check(request);

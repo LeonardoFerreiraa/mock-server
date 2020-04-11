@@ -9,7 +9,7 @@ import br.com.leonardoferreira.mockserver.util.DelegateMap;
 import br.com.leonardoferreira.mockserver.util.Pair;
 import br.com.leonardoferreira.mockserver.util.StringUtils;
 
-public class QueryParams extends DelegateMap<String, QueryParam> {
+public final class QueryParams extends DelegateMap<String, QueryParam> {
 
     private QueryParams(final Map<String, QueryParam> delegate) {
         super(delegate);

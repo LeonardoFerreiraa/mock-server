@@ -13,7 +13,7 @@ public class IOUtils {
     @SneakyThrows
     public static byte[] inputStreamToByteArray(final InputStream inputStream) {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
+        final byte[] buffer = new byte[1024];
 
         int len;
         while ((len = inputStream.read(buffer)) != -1) {

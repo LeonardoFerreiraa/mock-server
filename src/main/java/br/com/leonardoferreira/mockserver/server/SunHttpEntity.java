@@ -60,7 +60,7 @@ class SunHttpEntity implements HttpEntity {
             exchange.sendResponseHeaders(response.getStatus(), 0);
         } else {
             exchange.sendResponseHeaders(response.getStatus(), responseBytes.length);
-            try (final OutputStream responseBody = exchange.getResponseBody()) {
+            try (OutputStream responseBody = exchange.getResponseBody()) {
                 responseBody.write(responseBytes);
             }
         }
