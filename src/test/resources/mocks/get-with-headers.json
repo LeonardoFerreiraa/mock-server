@@ -1,0 +1,15 @@
+{
+  "route": {
+    "method": "GET",
+    "url": "/mock-header-check",
+    "headers": {
+      "x-tenant": "acme"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ok": true
+    }
+  }
+}

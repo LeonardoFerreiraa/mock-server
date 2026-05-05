@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.mockserver;
 
+import br.com.leonardoferreira.mockserver.loader.JsonMockLoader;
 import br.com.leonardoferreira.mockserver.server.WebServer;
 import br.com.leonardoferreira.mockserver.server.WebServerConfig;
 import lombok.AccessLevel;
@@ -48,6 +49,10 @@ public class MockServer {
 
     public static RequestHandlerJournal addHandler(final RequestHandler requestHandler) {
         return MockServer.requestDispatcher.addHandler(requestHandler);
+    }
+
+    public static RequestHandlerJournal load(final String classpathPath) {
+        return JsonMockLoader.load(classpathPath);
     }
 
     public static void cleanHandlers() {

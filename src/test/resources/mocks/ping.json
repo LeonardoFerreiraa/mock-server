@@ -1,0 +1,10 @@
+{
+  "route": {
+    "method": "GET",
+    "url": "/mock-ping"
+  },
+  "response": {
+    "status": 200,
+    "body": "pong"
+  }
+}
