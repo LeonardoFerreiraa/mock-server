@@ -1,0 +1,9 @@
+{
+  "route": {
+    "method": "DELETE",
+    "url": "/mock-delete"
+  },
+  "response": {
+    "status": 204
+  }
+}

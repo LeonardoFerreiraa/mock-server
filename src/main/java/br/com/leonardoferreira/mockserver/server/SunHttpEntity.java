@@ -32,7 +32,8 @@ class SunHttpEntity implements HttpEntity {
 
     @Override
     public void dispatchResponse(final Response response) {
-        addResponseHeader(Header.of("Content-Type", "application/json"));
+        final String contentType = response.getBody() instanceof String ? "text/plain" : "application/json";
+        addResponseHeader(Header.of("Content-Type", contentType));
 
         if (response.getHeaders() != null) {
             response.getHeaders()
@@ -53,7 +54,7 @@ class SunHttpEntity implements HttpEntity {
     @SneakyThrows
     private void writeResponseBody(final Response response) {
         final byte[] responseBytes = Optional.ofNullable(response.getBody())
-                .map(Json::toJson)
+                .map(body -> body instanceof String ? ((String) body).getBytes() : Json.toJson(body))
                 .orElse(null);
 
         if (responseBytes == null) {

@@ -1,0 +1,16 @@
+{
+  "route": {
+    "method": "GET",
+    "url": "/mock-customer/123"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 123,
+      "name": "Mario"
+    },
+    "headers": {
+      "x-custom-header": "customvalue"
+    }
+  }
+}

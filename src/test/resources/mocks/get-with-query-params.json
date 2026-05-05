@@ -1,0 +1,15 @@
+{
+  "route": {
+    "method": "GET",
+    "url": "/mock-query-check",
+    "queryParams": {
+      "status": "active"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "found": true
+    }
+  }
+}

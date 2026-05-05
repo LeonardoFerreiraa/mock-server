@@ -1,0 +1,13 @@
+{
+  "route": {
+    "method": "GET",
+    "url": "/mock-customer/{id}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "name": "PathVariable"
+    }
+  }
+}
